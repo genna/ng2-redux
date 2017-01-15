@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NgRedux, DevToolsExtension } from 'ng2-redux';
+import { NgRedux, DevToolsExtension } from 'wfw-ng2-redux';
 import { IAppState, rootReducer, enhancers } from '../store/index';
 const createLogger = require('redux-logger');
 
@@ -14,7 +14,7 @@ export class AppComponent {
 
     this.ngRedux.configureStore(
       rootReducer,
-      {},
+      { '$suspended': false },
       [ createLogger() ],
       [ ...enhancers, devTool.isEnabled() ? devTool.enhancer() : f => f]);
   }

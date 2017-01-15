@@ -1,6 +1,6 @@
 {
-  "name": "ng2-redux",
-  "version": "5.1.0",
+  "name": "wfw-ng2-redux",
+  "version": "6.0.0-beta-7",
   "description": "Angular 2 bindings for Redux",
   "main": "./lib/index.js",
   "scripts": {
@@ -11,7 +11,7 @@
     "mocha": "mocha --opts mocha.opts",
     "lint": "tslint 'src/**/*.ts' 'examples/counter/**.ts' --exclude 'examples/counter/node_modules'",
     "cover": "NODE_ENV=test nyc npm run mocha",
-    "prepublish": "npm test && npm run build"
+    "prepublish": "npm run build"
   },
   "typings": "./lib/index.d.ts",
   "repository": {

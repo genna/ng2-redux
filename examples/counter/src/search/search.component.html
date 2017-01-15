@@ -1,9 +1,12 @@
 <h1>String Length Example</h1>
 <input
-  id='search-input'
-  type="text"
-  class="search"
-  #field (keyup)="handleKeyUp(field.value)"/>
+	id='search-input'
+	type="text"
+	class="search"
+	#field (keyup)="handleKeyUp(field.value)"/>
 <p>Number of characters (from subscription): {{ numChars }}</p>
-<p>Number of characters (from async pipe): {{ numChars$ | async }}</p>
-<p>You entered: {{ search$ | async }}<p>
+
+<h3>{{keyword}}</h3>
+
+<button (click)="suspend()">Suspend</button>
+<button (click)="unsuspend()">Unsuspend</button>

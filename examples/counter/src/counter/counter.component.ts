@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NgRedux, select } from 'ng2-redux';
+import { NgRedux, select } from 'wfw-ng2-redux';
 import { Observable } from 'rxjs/Observable';
 import { CounterActions } from './counter.actions';
 import { RandomNumberService } from '../common/random-number.service';

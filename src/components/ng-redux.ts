@@ -17,6 +17,7 @@ import 'rxjs/add/operator/filter';
 import 'rxjs/add/observable/from';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/switchMap';
+import 'rxjs/add/operator/skipWhile';
 
 import shallowEqual from '../utils/shallow-equal';
 import wrapActionCreators from '../utils/wrap-action-creators';
@@ -40,7 +41,11 @@ export type Comparator = (x: any, y: any) => boolean;
 // released.
 type RetypedCompose = (func: Function, ...funcs: Function[]) => Function;
 
-export class NgRedux<RootState> {
+export interface ISuspendableState {
+    $suspended: boolean;
+}
+
+export class NgRedux<RootState extends ISuspendableState> {
     private _store: Store<RootState> = null;
     private _store$: BehaviorSubject<RootState> = null;
     private _defaultMapStateToTarget: Function;
@@ -131,8 +136,12 @@ export class NgRedux<RootState> {
             FunctionSelector<RootState, S>,
         comparator?: Comparator): Observable<S> {
 
+        let store = this._store$.filter(x => {
+            return !x.$suspended;
+        });
+
         if (!selector) {
-            return this._store$.distinctUntilChanged(comparator);
+            return store.distinctUntilChanged(comparator);
         }
 
         invariant(checkSelector(selector), ERROR_MESSAGE, selector);
@@ -142,14 +151,11 @@ export class NgRedux<RootState> {
             typeof selector === 'number' ||
             typeof selector === 'symbol') {
 
-            result = this._store$
-                .map(state => state[selector as PropertySelector]);
+            result = store.map(state => state[selector as PropertySelector]);
         } else if (Array.isArray(selector)) {
-            result = this._store$
-                .map(state => getIn(state, selector as PathSelector));
+            result = store.map(state => getIn(state, selector as PathSelector));
         } else {
-            result = this._store$
-                .map(selector as FunctionSelector<RootState, S>);
+            result = store.map(selector as FunctionSelector<RootState, S>);
         }
 
         return result.distinctUntilChanged(comparator);
